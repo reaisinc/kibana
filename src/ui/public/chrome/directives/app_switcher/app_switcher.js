@@ -21,10 +21,10 @@ require('ui/modules')
       }
 
       this.getNavLinks = bindKey($scope.chrome, 'getNavLinks');
+      
       //added sah to show username
-      this.username  = $scope.$root.username;
-      this.userindex = $scope.$root.userindex;
-
+      this.username  = $scope.chrome.getCurrentUser();//$root.username;
+      this.userindex = $scope.chrome.getCurrentKibanaIndex();
 
       // links don't cause full-navigation events in certain scenarios
       // so we force them when needed

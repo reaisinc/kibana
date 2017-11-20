@@ -51,5 +51,21 @@ module.exports = function (chrome, internals) {
     internals.appUrlStore.setItem(`appLastUrl:${appId}`, url);
   };
 
+  //added sah
+  chrome.getCurrentUser = function () {
+    return get(internals, ['app', 'username']);
+  };
+  //added sah
+  chrome.getCurrentKibanaIndex = function () {
+    return get(internals, ['app', 'currentIndex']);
+  };
+  //added sah
+  chrome.setCurrentUser = function (username) {
+    internals.appUrlStore.setItem('app', username);
+  };
+  //added sah
+  chrome.setCurrentKibanaIndex = function (currentIndex) {
+    internals.appUrlStore.setItem('app', currentIndex);
+  };
 
 };

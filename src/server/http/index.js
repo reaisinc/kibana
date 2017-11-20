@@ -134,6 +134,7 @@ module.exports = function (kbnServer, server, config) {
 
     return reply.continue();
   });
+
   //added sah to proxy get requests (retrieve google api calls, etc)
   server.route({
     method: 'GET',
@@ -200,12 +201,17 @@ module.exports = function (kbnServer, server, config) {
     path: '/logout',
     method: 'GET',
     handler: function (req, reply) {
+    
       //reply.output.headers['WWW-Authenticate']='Basic realm=Authorization Required';
       //reply.header('WWW-Authenticate', 'Basic realm=Authorization Required');
-      var response = reply().header('WWW-Authenticate', 'Basic realm=Authorization Required')
+      var response = reply().header('WWW-Authenticate', 'Basic realm=Authorization Required');
       //reply.set('WWW-Authenticate', 'Basic realm=Authorization Required');
       //return reply.sendStatus(401);
-      return response.code(401)
+      //return response.code(401)
+      return reply.redirect(format({
+        pathname: '/'
+      })).code(401);
+      
     }
   });
 
