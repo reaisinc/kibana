@@ -11,7 +11,7 @@ require('ui/modules')
     restrict: 'E',
     template: require('./app_switcher.html'),
     controllerAs: 'switcher',
-    controller: function ($scope, Private) {
+    controller: function ($scope, Private,$route) {
       let domLocation = Private(DomLocationProvider);
 
       // since we render this in an isolate scope we can't "require: ^chrome", but
@@ -21,7 +21,18 @@ require('ui/modules')
       }
 
       this.getNavLinks = bindKey($scope.chrome, 'getNavLinks');
-      
+
+      //copied from onwn-home
+      let userInfo = $route.current.locals.userInfo;
+      $scope.currentKibanaIndex = userInfo.currentKibanaIndex;
+      $scope.kibanaIndexPrefix = userInfo.kibanaIndexPrefix;
+      $scope.username = userInfo.username;
+      //added sah
+      $scope.$root.username = userInfo.username;
+      $scope.$root.userindex = $scope.currentKibanaIndex + $scope.kibanaIndexPrefix;
+      $scope.$root.username = "steve";
+      $scope.$root.userindex = ".kibana_steve";
+
       //added sah to show username
       this.username  = $scope.chrome.getCurrentUser();//$root.username;
       this.userindex = $scope.chrome.getCurrentKibanaIndex();
