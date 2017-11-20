@@ -11,7 +11,19 @@ export default function mapUri(server, prefix) {
     const { host } = parseUrl(url);
     if (path) {
       if (/\/$/.test(url)) url = url.substring(0, url.length - 1);
-      url += path;
+      // kibi: replace _search with _msearch to use siren-join when available
+      //const plugins = config.get('elasticsearch.plugins');
+      //if (coordinateAction && plugins && plugins.indexOf('siren-join') > -1) {
+        
+      if(true) {
+        var searchInd = path.indexOf('_search') === -1 ? path.indexOf('_msearch') : path.indexOf('_search');
+        url += (searchInd !== -1 ? path.slice(0, searchInd) + '_coordinate' + path.slice(searchInd) : path);
+      } else {
+        url += path;
+      }
+      
+      
+      //url += path;
     }
     const query = querystring.stringify(request.query);
     if (query) url += '?' + query;

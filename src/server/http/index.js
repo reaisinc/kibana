@@ -134,7 +134,68 @@ module.exports = function (kbnServer, server, config) {
 
     return reply.continue();
   });
+//added sah to proxy get requests (retrieve google api calls, etc)
+server.route({
+  method: 'GET',
+  path: '/proxy',
+  handler: {
+    proxy: {
+      mapUri: function (request, callback) {
+        var uri = request.query.uri;
+        //console.log('url: ', uri);
+        return callback(null, uri);
+      },
+      passThrough: true,
+      xforward: true
+    }
+  }
+});
 
+//added sah to poxy post requests
+server.route({
+  method: 'POST',
+  path: '/proxy',
+  handler: {
+    proxy: {
+      mapUri: function (request, callback) {
+        var uri = request.query.uri;
+        //reply(request.payload)
+        //console.log('url: ', uri);
+        return callback(null, uri);
+      },
+      passThrough: true,
+      xforward: true
+    }
+  }
+});
+
+server.route({
+  path: '/',
+  method: 'GET',
+  handler: function (req, reply) {
+    //added sah to print out the logged in user
+    console.log("Headers");
+    console.log(JSON.stringify(req.headers));
+    try {
+      if (config.get('own_home.proxy_user_header') in req.headers) {
+        var remoteUser = req.headers[config.get('own_home.proxy_user_header')];
+        if (remoteUser) console.log("Detected user:  " + remoteUser);
+        else console.log("Header detected but no remote user found");
+      } else {
+        console.log("No remote user")
+      }
+    } catch (err) {
+      console.log("Error getting remote user")
+    }
+
+
+    return reply.view('rootRedirect', {
+      hashRoute: `${config.get('server.basePath')}/app/kibana`,
+      defaultRoute: getDefaultRoute(kbnServer),
+    });
+  }
+});
+/*
   server.route({
     path: '/',
     method: 'GET',
@@ -145,7 +206,7 @@ module.exports = function (kbnServer, server, config) {
       });
     }
   });
-
+*/
   server.route({
     method: 'GET',
     path: '/{p*}',

@@ -70,6 +70,20 @@ define(function (require) {
           'elasticsearch. This setting attempts to prevent the list of segments from getting too long, which might ' +
           'cause requests to take much longer to process'
       },
+      //added sah see https://github.com/nreese/kibana/commit/57be6c6394790da5273f79f469282772cc09369d#diff-d1695ba2026ff89878f9e4f4de683758
+      'courier:ignoreFilterIfFieldNotInIndex': {
+        value: false,
+        description: 'This configuration enhances support for dashboards containing visualizations accessing dissimilar indexes. ' +
+        'When set to false, all filters are applied to all visualizations. ' +
+        'When set to true, filter(s) will be ignored for a visualization ' +
+        'when the visualization\'s index does not contain the filtering field.'
+      },
+      //added sah need to have a hardcoded url to elasticsearch to update the indices.
+      'visualization:elasticSearchUrl': {
+        type: 'string',
+        description: 'The elasticsearch url for proxy calls in the doc_viewer.js file.  Note: should be the same url specified in config/kibi.yml',
+      },
+      
       'fields:popularLimit': {
         value: 10,
         description: 'The top N most popular fields to show',
