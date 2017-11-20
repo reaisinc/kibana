@@ -82,7 +82,7 @@ module.exports = function (kbnServer, server, config) {
           lookupCompressed: true
         }
       },
-      config: {auth: false}
+      config: { auth: false }
     });
   });
 
@@ -94,7 +94,7 @@ module.exports = function (kbnServer, server, config) {
       handler: {
         file: filePath
       },
-      config: {auth: false}
+      config: { auth: false }
     });
   });
 
@@ -134,79 +134,94 @@ module.exports = function (kbnServer, server, config) {
 
     return reply.continue();
   });
-//added sah to proxy get requests (retrieve google api calls, etc)
-server.route({
-  method: 'GET',
-  path: '/proxy',
-  handler: {
-    proxy: {
-      mapUri: function (request, callback) {
-        var uri = request.query.uri;
-        //console.log('url: ', uri);
-        return callback(null, uri);
-      },
-      passThrough: true,
-      xforward: true
-    }
-  }
-});
-
-//added sah to poxy post requests
-server.route({
-  method: 'POST',
-  path: '/proxy',
-  handler: {
-    proxy: {
-      mapUri: function (request, callback) {
-        var uri = request.query.uri;
-        //reply(request.payload)
-        //console.log('url: ', uri);
-        return callback(null, uri);
-      },
-      passThrough: true,
-      xforward: true
-    }
-  }
-});
-
-server.route({
-  path: '/',
-  method: 'GET',
-  handler: function (req, reply) {
-    //added sah to print out the logged in user
-    console.log("Headers");
-    console.log(JSON.stringify(req.headers));
-    try {
-      if (config.get('own_home.proxy_user_header') in req.headers) {
-        var remoteUser = req.headers[config.get('own_home.proxy_user_header')];
-        if (remoteUser) console.log("Detected user:  " + remoteUser);
-        else console.log("Header detected but no remote user found");
-      } else {
-        console.log("No remote user")
+  //added sah to proxy get requests (retrieve google api calls, etc)
+  server.route({
+    method: 'GET',
+    path: '/proxy',
+    handler: {
+      proxy: {
+        mapUri: function (request, callback) {
+          var uri = request.query.uri;
+          //console.log('url: ', uri);
+          return callback(null, uri);
+        },
+        passThrough: true,
+        xforward: true
       }
-    } catch (err) {
-      console.log("Error getting remote user")
     }
+  });
 
+  //added sah to poxy post requests
+  server.route({
+    method: 'POST',
+    path: '/proxy',
+    handler: {
+      proxy: {
+        mapUri: function (request, callback) {
+          var uri = request.query.uri;
+          //reply(request.payload)
+          //console.log('url: ', uri);
+          return callback(null, uri);
+        },
+        passThrough: true,
+        xforward: true
+      }
+    }
+  });
 
-    return reply.view('rootRedirect', {
-      hashRoute: `${config.get('server.basePath')}/app/kibana`,
-      defaultRoute: getDefaultRoute(kbnServer),
-    });
-  }
-});
-/*
   server.route({
     path: '/',
     method: 'GET',
     handler: function (req, reply) {
+      //added sah to print out the logged in user
+      console.log("Headers");
+      console.log(JSON.stringify(req.headers));
+      try {
+        if (config.get('own_home.proxy_user_header') in req.headers) {
+          var remoteUser = req.headers[config.get('own_home.proxy_user_header')];
+          if (remoteUser) console.log("Detected user:  " + remoteUser);
+          else console.log("Header detected but no remote user found");
+        } else {
+          console.log("No remote user")
+        }
+      } catch (err) {
+        console.log("Error getting remote user")
+      }
+
+
       return reply.view('rootRedirect', {
         hashRoute: `${config.get('server.basePath')}/app/kibana`,
         defaultRoute: getDefaultRoute(kbnServer),
       });
     }
   });
-*/
+  //added sah to logout
+  server.route({
+    path: '/logout',
+    method: 'GET',
+    handler: function (req, reply) {
+      //reply.output.headers['WWW-Authenticate']='Basic realm=Authorization Required';
+      //reply.header('WWW-Authenticate', 'Basic realm=Authorization Required');
+      var response = reply().header('WWW-Authenticate', 'Basic realm=Authorization Required')
+      //reply.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+      //return reply.sendStatus(401);
+      return response.code(401)
+    }
+  });
+
+  //return ('Logout', 401, {'WWW-Authenticate': 'Basic realm="Login required"'})
+  /*
+    server.route({
+      path: '/',
+      method: 'GET',
+      handler: function (req, reply) {
+        return reply.view('rootRedirect', {
+          hashRoute: `${config.get('server.basePath')}/app/kibana`,
+          defaultRoute: getDefaultRoute(kbnServer),
+        });
+      }
+    });
+  */
   server.route({
     method: 'GET',
     path: '/{p*}',
@@ -220,7 +235,7 @@ server.route({
         search: req.url.search,
         pathname: pathPrefix + path.slice(0, -1),
       }))
-      .permanent(true);
+        .permanent(true);
     }
   });
 
