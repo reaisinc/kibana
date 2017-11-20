@@ -183,10 +183,10 @@ module.exports = function (kbnServer, server, config) {
           if (remoteUser) console.log("Detected user:  " + remoteUser);
           else console.log("Header detected but no remote user found");
         } else {
-          console.log("No remote user")
+          console.log("No remote user");
         }
       } catch (err) {
-        console.log("Error getting remote user")
+        console.log("Error getting remote user");
       }
 
 
@@ -201,17 +201,18 @@ module.exports = function (kbnServer, server, config) {
     path: '/logout',
     method: 'GET',
     handler: function (req, reply) {
-    
       //reply.output.headers['WWW-Authenticate']='Basic realm=Authorization Required';
       //reply.header('WWW-Authenticate', 'Basic realm=Authorization Required');
       var response = reply().header('WWW-Authenticate', 'Basic realm=Authorization Required');
       //reply.set('WWW-Authenticate', 'Basic realm=Authorization Required');
       //return reply.sendStatus(401);
       //return response.code(401)
+      return reply.redirect('/').code(401);
+      /*
       return reply.redirect(format({
         pathname: '/'
       })).code(401);
-      
+      */
     }
   });
 
