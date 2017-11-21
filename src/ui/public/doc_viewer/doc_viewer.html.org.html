@@ -8,10 +8,7 @@
     <table class="table table-condensed" ng-show="mode == 'table'">
       <tbody>
         <tr ng-repeat="field in fields">
-          <td field-name="field"
-              field-type="mapping[field].type"
-              width="1%"
-              class="doc-viewer-field">
+          <td field-name="field" field-type="mapping[field].type" width="1%" class="doc-viewer-field">
           </td>
           <td width="1%" class="doc-viewer-buttons" ng-if="filter">
             <span ng-if="mapping[field].filterable">
@@ -37,17 +34,11 @@
           </td>
 
           <td>
-            <i ng-if="!mapping[field] && field[0] === '_'"
-              tooltip-placement="top"
-              tooltip="Field names beginning with _ are not supported"
+            <i ng-if="!mapping[field] && field[0] === '_'" tooltip-placement="top" tooltip="Field names beginning with _ are not supported"
               class="fa fa-warning text-color-warning ng-scope doc-viewer-underscore"></i>
-            <i ng-if="!mapping[field] && field[0] !== '_' && !showArrayInObjectsWarning(doc, field)"
-              tooltip-placement="top"
-              tooltip="No cached mapping for this field. Refresh field list from the Settings > Indices page"
+            <i ng-if="!mapping[field] && field[0] !== '_' && !showArrayInObjectsWarning(doc, field)" tooltip-placement="top" tooltip="No cached mapping for this field. Refresh field list from the Settings > Indices page"
               class="fa fa-warning text-color-warning ng-scope doc-viewer-no-mapping"></i>
-            <i ng-if="showArrayInObjectsWarning(doc, field)"
-              tooltip-placement="top"
-              tooltip="Objects in arrays are not well supported."
+            <i ng-if="showArrayInObjectsWarning(doc, field)" tooltip-placement="top" tooltip="Objects in arrays are not well supported."
               class="fa fa-warning text-color-warning ng-scope doc-viewer-object-array"></i>
             <div class="doc-viewer-value" ng-bind-html="typeof(formatted[field]) === 'undefined' ? hit[field] : formatted[field] | trustAsHtml"></div>
           </td>
@@ -55,12 +46,7 @@
       </tbody>
     </table>
 
-    <div
-      id="json-ace"
-      ng-show="mode == 'json'"
-      ng-model="hitJson"
-      readonly
-      ui-ace="{
+    <div id="json-ace" ng-show="mode == 'json'" ng-model="hitJson" readonly ui-ace="{
         useWrapMode: true,
         onLoad: aceLoaded,
         advanced: {
