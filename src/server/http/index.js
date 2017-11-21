@@ -206,8 +206,8 @@ module.exports = function (kbnServer, server, config) {
       var response = reply().header('WWW-Authenticate', 'Basic realm=Authorization Required');
       //reply.set('WWW-Authenticate', 'Basic realm=Authorization Required');
       //return reply.sendStatus(401);
-      //return response.code(401)
-      return reply.redirect('/').code(401);
+      return response.code(401);
+      //return reply.redirect('/').code(401);
       /*
       return reply.redirect(format({
         pathname: '/'

@@ -28,5 +28,4 @@ selenium
 *.swp
 *.swo
 yarn.lock
-config/kibana.yml.tmp
-config/kibana.yml.1
+config/
