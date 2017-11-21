@@ -6,3 +6,4 @@ elasticdump --input=http://10.4.6.11:9200/.kibi --output=$ --type=data --searchB
 
 elasticdump --input=kibana-exported-steve.json --output=http://elasticsearch:9200/.kibana_steve --type=data
 
+git filter-branch --force --index-filter 'git rm --cached --ignore-unmatch config/kibana.yml' --prune-empty --tag-name-filter cat -- --all
